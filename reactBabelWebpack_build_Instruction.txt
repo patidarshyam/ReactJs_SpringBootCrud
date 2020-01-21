@@ -1,0 +1,172 @@
+https://medium.com/@siddharthac6/getting-started-with-react-js-using-webpack-and-babel-66549f8fbcb8
+
+https://blog.bitsrc.io/setting-a-react-project-from-scratch-using-babel-and-webpack-5f26a525535d
+
+STEPS-
+1)Create our application directory "app" and cd app into it. 
+
+2)npm init and finish the process. package.json should get created inside (current)app directory
+
+3)npm i -S react react-dom
+
+4)Install Babel packages as dev dependency, 
+npm i -D babel-core babel-loader babel-preset-env babel-preset-react
+
+
+5)Install Webpack packages as dev dependencies
+npm i -D webpack webpack-cli webpack-dev-server html-webpack-plugin
+
+6) Update the package.json/webpack-config.js/.babelrc dependencies according to below formate.
+
+NOTE : BABEL CORE AND BABEL LOADER VERSION IS IMPORNTANT THING TO NOTICE
+
+=======================Babel 6.x ('babel-core') with 'babel-loader@7' ================================
+Error: Cannot find module 
+'@babel/core'
+ babel-loader@8 requires Babel 7.x (the package '@babel/core'). If you'd like to use Babel 6.x ('babel-core'), you should install 'babel-loader@7'
+
+ -------package.json-------------
+ {
+  "name": "reactapp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack-dev-server --mode development --open --hot",
+    "build": "webpack --mode production"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.5",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
+    "html-webpack-plugin": "^3.2.0",
+    "webpack": "^4.41.5",
+    "webpack-cli": "^3.3.10",
+    "webpack-dev-server": "^3.10.1"
+  }
+}
+---------------webpack-config.js-------
+const path = require('path');
+const HWP = require('html-webpack-plugin');
+
+module.exports = {
+    entry: path.join(__dirname, '/src/index.js'),
+    output: {
+        filename: 'build.js',
+        path: path.join(__dirname, '/dist')
+    },
+    module:{
+        rules:[
+        {
+           test: /\.js$/,
+           exclude: /node_modules/,
+           loader: 'babel-loader'
+        }]
+    },
+    plugins:[
+       new HWP(
+           {template: path.join(__dirname,'/src/index.html')}
+        )
+    ]
+}
+---------------.babelrc------------
+{"presets":["env", "react"]}
+---------------------------------
+
+=======================Babel 7.x ('babel-core') with 'babel-loader@8' ================================
+ERROR in ./src/index.js
+Module build failed (from ./node_modules/babel-loader/lib/index.js):
+Error: Cannot find module 'babel-preset-env' from 'D:\react\ReactApp\reactApp'
+- Did you mean "@babel/env"?
+
+
+ -------package.json-------------
+ {
+  "name": "reactapp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack-dev-server --mode development --open --hot",
+    "build": "webpack --mode production"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.7.7",
+    "@babel/preset-env": "^7.8.3",
+    "@babel/preset-react": "^7.7.4",
+    "babel-loader": "^8.0.6",
+    "html-webpack-plugin": "^3.2.0",
+    "webpack": "^4.41.5",
+    "webpack-cli": "^3.3.10",
+    "webpack-dev-server": "^3.10.1"
+  }
+}
+
+---------------webpack-config.js-------
+const path = require('path');
+const HWP = require('html-webpack-plugin');
+
+module.exports = {
+    entry: path.join(__dirname, '/src/index.js'),
+    output: {
+        filename: 'build.js',
+        path: path.join(__dirname, '/dist')
+    },
+    module:{
+        rules:[
+        {
+           test: /\.js$/,
+           exclude: /node_modules/,
+           loader: 'babel-loader'
+        }]
+    },
+    plugins:[
+       new HWP(
+           {template: path.join(__dirname,'/src/index.html')}
+        )
+    ]
+}
+---------------.babelrc------------
+{"presets":["@babel/env", "@babel/react"]}
+---------------------------------
+npm start
+npm run build - it will create one index.html and one index_bundle.js file
+this two files we need to paste into java/resources/static folder
+
+--------------https://blog.bitsrc.io/setting-a-react-project-from-scratch-using-babel-and-webpack-5f26a525535d
+ERROR in ./src/App.css 1:0
+Module parse failed: Unexpected character '@' (1:0)
+You may need an appropriate loader to handle this file type, currently no loaders are configured to process this file. See https://webpack.js.org/concepts#loaders
+> @import url(https://unpkg.com/bootstrap@4.1.0/dist/css/bootstrap.min.css)
+
+solution - provide entry into webpack-config.js as-
+module{ rules[
+	{
+            test: /\.css$/,
+            use: [
+               "style-loader",
+               {
+                  loader: "css-loader",
+                  options: {
+                     modules: true
+                  }
+               }
+            ]
+    },
+]}
+------------------
