@@ -374,4 +374,51 @@ module{ rules[
             ]
     },
 ]}
-------------------
+======================================
+# Spring boot WAR configuration
+reference-
+https://howtodoinjava.com/spring-boot2/war-packaging-example/
+https://docs.spring.io/spring-boot/docs/current/reference/html/howto.html#howto-traditional-deployment
+
+-----------------Spring boot starter class--------------
+package com.shyam.fullstack.springboot.maven.crud;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+
+@SpringBootApplication
+public class SpringBootFullstackCrudAppApplication extends SpringBootServletInitializer{
+	
+	public SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+		return application.sources(SpringBootFullstackCrudAppApplication.class);
+	}
+	
+	public static void main(String[] args) {
+		SpringApplication.run(SpringBootFullstackCrudAppApplication.class, args);
+	}
+
+}
+--------------------------Spring boot pom.xml changes---------------------
+
+	<packaging>war</packaging>
+	
+	<dependencies>
+		-----...
+		<dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-tomcat</artifactId>
+		    <scope>provided</scope>
+        	</dependency>
+
+		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
+		<dependency>
+		    <groupId>com.fasterxml.jackson.core</groupId>
+		    <artifactId>jackson-databind</artifactId>
+		    <version>2.9.4</version>
+		</dependency>
+
+	</dependencies>
+		------- ...
+
+-----------------------------------------------------------------------
